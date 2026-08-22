@@ -7,11 +7,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install openssh-server sudo curl wget nano unzip -y
 
 # 2. Tải về, giải nén và phân quyền cho LocalXpose
-RUN wget https://localxpose.io \
-    && unzip loclx-linux-amd64.zip \
-    && mv loclx /usr/local/bin/ \
-    && chmod +x /usr/local/bin/loclx \
-    && rm loclx-linux-amd64.zip
+RUN wget https://api.localxpose.io/api/downloads/loclx-linux-amd64.deb \
+    && dpkg -i loclx-linux-amd64.deb
 
 # 3. Đăng nhập và lưu Token LocalXpose của bạn
 RUN loclx tunnel account login --token TSnH7rrlEyGKZLX1LbV2L6NF1Ws0lEnUMyLUkumJ
