@@ -11,7 +11,7 @@ RUN wget https://api.localxpose.io/api/downloads/loclx-linux-amd64.deb \
     && dpkg -i loclx-linux-amd64.deb
 
 # 3. Đăng nhập và lưu Token LocalXpose của bạn
-RUN loclx tunnel account login --token TSnH7rrlEyGKZLX1LbV2L6NF1Ws0lEnUMyLUkumJ
+RUN loclx account login --access-token "TSnH7rrlEyGKZLX1LbV2L6NF1Ws0lEnUMyLUkumJ"
 
 # 4. Sửa cấu hình /etc/ssh/sshd_config (Bỏ dấu #, bật PasswordAuth và cho phép đăng nhập Root)
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
