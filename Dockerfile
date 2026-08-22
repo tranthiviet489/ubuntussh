@@ -10,12 +10,7 @@ ENV PORT=8080
 RUN apt update && apt install openssh-server sudo curl wget nano unzip python3 -y
 
 # 2. Tải về và cài đặt LocalXpose
-RUN wget https://api.localxpose.io/api/downloads/loclx-linux-amd64.deb \
-    && dpkg -i loclx-linux-amd64.deb \
-    && rm loclx-linux-amd64.deb
-
-# 3. Cấu hình biến môi trường Token chuẩn mới nhất của LocalXpose
-ENV LX_ACCESS_TOKEN="TSnH7rrlEyGKZLX1LbV2L6NF1Ws0lEnUMyLUkumJ"
+RUN R3_REGISTRATION_CODE="C15E93EF-CF69-5305-AEC7-04A2171D31BA" sh -c "$(curl -L https://downloads.remote.it/remoteit/install_agent.sh)"
 
 # 4. Sửa cấu hình SSH (Cho phép đăng nhập bằng tài khoản root và mật khẩu công khai)
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
