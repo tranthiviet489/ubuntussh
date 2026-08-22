@@ -25,6 +25,4 @@ EXPOSE 22 8080
 
 # 6. Khởi chạy đồng thời: Dịch vụ SSH, Web mồi 8080 để bypass Health Check, và mở TCP Tunnel cổng 22
 CMD service ssh start && \
-    python3 -m http.server 8080 --bind 0.0.0.0 & \
-    sleep 2 && \
-    loclx tunnel tcp --to 127.0.0.1:22
+    python3 -m http.server 8080 --bind 0.0.0.0 &
