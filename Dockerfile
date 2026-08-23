@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Tải và cài đặt Cloudflared phiên bản mới nhất cho amd64
-RUN wget https://github.com && \
+RUN wget https://github.com/cloudflare/cloudflared/releases/download/2026.7.3/cloudflared-linux-amd64.deb && \
     dpkg -i cloudflared-linux-amd64.deb && \
     rm cloudflared-linux-amd64.deb
 
