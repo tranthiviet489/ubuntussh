@@ -1,11 +1,10 @@
 FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
-
 ENV PORT=8080
 
-# 1. Cập nhật hệ thống và cài đặt ttyd cùng các công cụ hỗ trợ cơ bản
-RUN apt update && apt install -y \
+# 1. Cập nhật hệ thống và cài đặt các công cụ cần thiết
+RUN apt-get update && apt-get install -y \
     ttyd \
     tmux \
     openssh-server \
@@ -16,9 +15,23 @@ RUN apt update && apt install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
+# 2. Tải và cài đặt Cloudflared phiên bản mới nhất cho amd64
+RUN wget https://github.com && \
+    dpkg -i cloudflared-linux-amd64.deb && \
+    rm cloudflared-linux-amd64.deb
+
+# 3. Đặt mật khẩu cho tài khoản root
 RUN echo 'root:root' | chpasswd
 
-# Khai báo mở cổng 8080 phục vụ cho Web Terminal
+# 4. Tạo file script khởi chạy cả 2 tiến trình cùng lúc
+RUN printf '#!/bin/bash\n\
+# Khởi chạy Cloudflare Tunnel ở chế độ chạy ngầm\n\
+cloudflared tunnel --url http://localhost:8080 &\n\
+\n\
+# Khởi chạy ttyd làm tiến trình chính để giữ container luôn chạy\n\
+exec ttyd -W -p 8080 bash\n' > /entrypoint.sh && chmod +x /entrypoint.sh
+
 EXPOSE 8080
 
-CMD ["ttyd", "-W", "-p", "8080", "bash"]
+# Gọi script khi container khởi động
+CMD ["/entrypoint.sh"]
