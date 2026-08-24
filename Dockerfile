@@ -15,19 +15,15 @@ RUN apt-get update && apt-get install -y \
     unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. Tải và cài đặt Cloudflared phiên bản mới nhất cho amd64
-RUN wget https://github.com/cloudflare/cloudflared/releases/download/2026.7.3/cloudflared-linux-amd64.deb && \
-    dpkg -i cloudflared-linux-amd64.deb && \
-    rm cloudflared-linux-amd64.deb
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+    && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+    && mkdir /var/run/sshd
 
 # 3. Đặt mật khẩu cho tài khoản root
 RUN echo 'root:root' | chpasswd
 
 # 4. Tạo file script khởi chạy cả 2 tiến trình cùng lúc
 RUN printf '#!/bin/bash\n\
-# Khởi chạy Cloudflare Tunnel ở chế độ chạy ngầm\n\
-cloudflared tunnel --url http://localhost:8080 &\n\
-\n\
 # Khởi chạy ttyd làm tiến trình chính để giữ container luôn chạy\n\
 exec ttyd -W -p 8080 bash\n' > /entrypoint.sh && chmod +x /entrypoint.sh
 
