@@ -23,7 +23,7 @@ RUN echo 'root:root' | chpasswd
 
 RUN printf '#!/bin/bash\n\
 # Khởi động dịch vụ SSH chạy ngầm\n\
-exec service ssh start\n\
+service ssh start\n\
 # Khởi chạy ttyd làm tiến trình chính để giữ container luôn chạy\n\
 exec ttyd -W -p 8080 bash\n' > /entrypoint.sh \
     && chmod +x /entrypoint.sh
