@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
     && sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config \
-    && mkdir /var/run/sshd
+    && mkdir -p /var/run/sshd
 
 # 3. Đặt mật khẩu cho tài khoản root
 RUN echo 'root:root' | chpasswd
