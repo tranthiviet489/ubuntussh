@@ -1,7 +1,6 @@
 FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV PORT=8080
 
 # 1. Cập nhật hệ thống và cài đặt các công cụ cần thiết
 RUN apt-get update && apt-get install -y \
@@ -24,7 +23,7 @@ RUN echo 'root:root' | chpasswd
 
 RUN printf '#!/bin/bash\n\
 # Khởi động dịch vụ SSH chạy ngầm\n\
-exec sudo service ssh start\n\
+exec service ssh start\n\
 # Khởi chạy ttyd làm tiến trình chính để giữ container luôn chạy\n\
 exec ttyd -W -p 8080 bash\n' > /entrypoint.sh \
     && chmod +x /entrypoint.sh
